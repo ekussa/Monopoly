@@ -16,7 +16,7 @@ namespace Monopoly
             return _random.Next(0, 7);
         }
         
-        public int[] RollTwice()
+        public int[] Roll()
         {
             return
                 new[]

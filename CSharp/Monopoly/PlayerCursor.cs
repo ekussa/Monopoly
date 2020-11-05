@@ -35,9 +35,13 @@ namespace Monopoly
             return _players[_currentPlayer];
         }
 
-        private bool GoToJail(IReadOnlyList<int> diceResult)
+        private bool GoToJail(IEnumerable<int> dices)
         {
-            if (diceResult[0] == diceResult[1])
+            var dicesList = dices.ToList();
+            var allDicesAreSame = 
+                dicesList.Count > 1 &&
+                dicesList.GroupBy(_ => _).Count() == 1;
+            if (allDicesAreSame)
             {
                 _goToNextPlayer = false;
                 return --_goToJailCounter == 0;
@@ -49,7 +53,7 @@ namespace Monopoly
         
         public PlayerTurn RollDice()
         {
-            var dice = _dice.RollTwice();
+            var dice = _dice.Roll();
             var shouldGoToJail = GoToJail(dice);
             var player = GetPlayer();
 

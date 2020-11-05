@@ -12,6 +12,8 @@ namespace Monopoly.UnitTests
         private List<Player> _players;
         private MockRepository _repositoryMock;
         private Mock<IDice> _dice;
+        private int[] _twoDiceSame;
+        private int[] _twoDiceDifferent;
 
         [SetUp]
         public void Setup()
@@ -23,6 +25,8 @@ namespace Monopoly.UnitTests
                 new Bank(),
                 new Computer(Color.Aqua)
             };
+            _twoDiceSame = new[] {5, 5};
+            _twoDiceDifferent = new[] {2, 3};
         }
 
         [TestCase(1, 0)]
@@ -34,10 +38,9 @@ namespace Monopoly.UnitTests
         public void ShouldCyclePlayers(int iterations, int expectedIndexPlayer)
         {
             //Arrange
-            var dice = new[] {5, 2};
             _dice.
-                Setup(_ => _.RollTwice()).
-                Returns(dice);
+                Setup(_ => _.Roll()).
+                Returns(_twoDiceDifferent);
 
             var cursor = new PlayerCursor(_players, _dice.Object);
             
@@ -47,7 +50,7 @@ namespace Monopoly.UnitTests
                 playerTurn = cursor.RollDice();
 
             //Assert
-            playerTurn.Total.Should().Be(dice.Sum());
+            playerTurn.Total.Should().Be(_twoDiceDifferent.Sum());
             playerTurn.Player.Should().Be(_players[expectedIndexPlayer]);
         }
         
@@ -66,10 +69,9 @@ namespace Monopoly.UnitTests
             bool shouldGoToJail)
         {
             //Arrange
-            var dice = new[] {5, 5};
             _dice.
-                Setup(_ => _.RollTwice()).
-                Returns(dice);
+                Setup(_ => _.Roll()).
+                Returns(_twoDiceSame);
 
             var cursor = new PlayerCursor(_players, _dice.Object);
             
@@ -79,7 +81,7 @@ namespace Monopoly.UnitTests
                 playerTurn = cursor.RollDice();
 
             //Assert
-            playerTurn.Total.Should().Be(dice.Sum());
+            playerTurn.Total.Should().Be(_twoDiceSame.Sum());
             playerTurn.ShouldGoToJail.Should().Be(shouldGoToJail);
             playerTurn.Player.Should().Be(_players[expectedIndexPlayer]);
         }
