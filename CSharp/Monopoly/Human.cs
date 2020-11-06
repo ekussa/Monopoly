@@ -6,7 +6,7 @@ namespace Monopoly
     {
         public Color Color { get; }
         
-        public Human(Color color, IDice dice)
+        public Human(Color color)
         {
             Color = color;
         }

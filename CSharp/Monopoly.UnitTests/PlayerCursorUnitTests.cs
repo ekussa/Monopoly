@@ -42,16 +42,16 @@ namespace Monopoly.UnitTests
                 Setup(_ => _.Roll()).
                 Returns(_twoDiceDifferent);
 
-            var cursor = new PlayerCursor(_players, _dice.Object);
+            var cursor = new PlayerMovement(_players, _dice.Object);
             
             //Act
-            PlayerTurn playerTurn = null;
+            PlayerMove playerMove = null;
             for (var i = 0; i < iterations; i++)
-                playerTurn = cursor.RollDice();
+                playerMove = cursor.Next();
 
             //Assert
-            playerTurn.Total.Should().Be(_twoDiceDifferent.Sum());
-            playerTurn.Player.Should().Be(_players[expectedIndexPlayer]);
+            playerMove.Total.Should().Be(_twoDiceDifferent.Sum());
+            playerMove.Player.Should().Be(_players[expectedIndexPlayer]);
         }
         
         [TestCase(1, 0, false)]
@@ -60,30 +60,70 @@ namespace Monopoly.UnitTests
         [TestCase(4, 1, false)]
         [TestCase(5, 1, false)]
         [TestCase(6, 1, true)]
-        [TestCase(7, 0, false)]
-        [TestCase(8, 0, false)]
-        [TestCase(9, 0, true)]
-        public void ShouldNotCyclePlayers_WhenSameNumberOnDice(
+        public void ShouldFreezeTwoPlayers(
             int iterations,
             int expectedIndexPlayer,
-            bool shouldGoToJail)
+            bool shouldFreeze)
         {
             //Arrange
             _dice.
                 Setup(_ => _.Roll()).
                 Returns(_twoDiceSame);
 
-            var cursor = new PlayerCursor(_players, _dice.Object);
+            var cursor = new PlayerMovement(_players, _dice.Object);
             
             //Act
-            PlayerTurn playerTurn = null;
+            PlayerMove playerMove = null;
             for (var i = 0; i < iterations; i++)
-                playerTurn = cursor.RollDice();
+                playerMove = cursor.Next();
 
             //Assert
-            playerTurn.Total.Should().Be(_twoDiceSame.Sum());
-            playerTurn.ShouldGoToJail.Should().Be(shouldGoToJail);
-            playerTurn.Player.Should().Be(_players[expectedIndexPlayer]);
+            playerMove.Total.Should().Be(shouldFreeze ? 0 : _twoDiceSame.Sum());
+            playerMove.Unfrozen.Should().Be(shouldFreeze);
+            playerMove.Player.Should().Be(_players[expectedIndexPlayer]);
+        }
+
+        [TestCase(1, 0, false)]
+        [TestCase(2, 0, false)]
+        [TestCase(3, 0, true)]
+        [TestCase(4, 1, false)]
+        [TestCase(5, 1, false)]
+        [TestCase(6, 1, true)]
+        public void ShouldFreezelayerAndThenUnfreeze(
+            int iterations,
+            int expectedIndexPlayer,
+            bool shouldFreeze)
+        {
+            //Arrange
+            _dice.
+                Setup(_ => _.Roll()).
+                Returns(_twoDiceSame);
+
+            var cursor = new PlayerMovement(_players, _dice.Object);
+            
+            //Act
+            PlayerMove playerMove = null;
+            for (var i = 0; i < iterations; i++)
+                playerMove = cursor.Next();
+
+            //Assert
+            playerMove.Total.Should().Be(shouldFreeze ? 0 : _twoDiceSame.Sum());
+            playerMove.Unfrozen.Should().Be(shouldFreeze);
+            playerMove.Player.Should().Be(_players[expectedIndexPlayer]);
+        }
+
+        [Test]
+        public void ShouldGetAllPlayers()
+        {
+            //Arrange
+            var cursor = new PlayerMovement(_players, _dice.Object);
+            
+            //Act
+            var result = cursor.GetAll();
+
+            //Assert
+            result.Count.Should().Be(2);
+
         }
     }
 }
