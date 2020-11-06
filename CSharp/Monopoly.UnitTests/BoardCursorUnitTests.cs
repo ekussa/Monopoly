@@ -13,6 +13,7 @@ namespace Monopoly.UnitTests
         private MockRepository _repositoryMock;
         private Mock<IPlayerCursor> _playerCursorMock;
         private Board _fivePlacesBoard;
+        private Board _fivePlacesWithFreezeBoard;
         private Human _player1;
         private Human _player2;
 
@@ -41,6 +42,15 @@ namespace Monopoly.UnitTests
                 new FreeStop(),
                 new FreeStop()
             };
+            
+            _fivePlacesWithFreezeBoard = new Board
+            {
+                new StartLand(),
+                new FreeStop(),
+                new FreezeEntry(),
+                new FreezeVisit(),
+                new FreeStop()
+            };
         }
         
         [TestCase(1,1)]
@@ -55,7 +65,7 @@ namespace Monopoly.UnitTests
         [TestCase(10,0)]
         [TestCase(11, 1)]
         [TestCase(12,2)]
-        public void ShouldMoveOnePlace(int totalDice, int destinationIndex)
+        public void ShouldMovePlayerOnBoard(int totalDice, int destinationIndex)
         {
             //Arrange
             _playerCursorMock.
@@ -74,28 +84,41 @@ namespace Monopoly.UnitTests
         }
 
         [Test]
-        public void ShouldFreeze()
+        public void ShouldFreeze_WhenThereIsAFreezeStop()
         {
             //Arrange
-            var dice = new Dice();
-            var playerCursor = new PlayerMovement(
-                new List<Player>
-                {
-                    new Human(Color.Aquamarine),
-                    new Human(Color.Aquamarine)
-                }, dice);
-            var board = new Board
-            {
-                new StartLand(),
-                new FreeStop()
-            };
-            var boardCursor = new BoardCursor(board, playerCursor);
+            _playerCursorMock.
+                Setup(_ => _.Next()).
+                Returns(new PlayerMove(_player1, 0, true));
+            
+            var boardCursor = new BoardCursor(
+                _fivePlacesWithFreezeBoard,
+                _playerCursorMock.Object);
 
             //Act
             boardCursor.NextTurn();
 
             //Assert
+            boardCursor.Positions[_player1].Should().Be(3);
+        }
+        
+        [Test]
+        public void ShouldFreeze_WhenThereIsNoFreezeStop()
+        {
+            //Arrange
+            _playerCursorMock.
+                Setup(_ => _.Next()).
+                Returns(new PlayerMove(_player1, 0, true));
+            
+            var boardCursor = new BoardCursor(
+                _fivePlacesBoard,
+                _playerCursorMock.Object);
 
+            //Act
+            boardCursor.NextTurn();
+
+            //Assert
+            boardCursor.Positions[_player1].Should().Be(0);
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿namespace Monopoly
 {
-    public class PrisonEntry : PublicSquare
+    public class FreezeEntry : PublicSquare
     {
-        public PrisonEntry()
+        public FreezeEntry()
             : base("PrisonEntry")
         {
         }

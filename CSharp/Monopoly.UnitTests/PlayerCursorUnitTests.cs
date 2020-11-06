@@ -42,7 +42,7 @@ namespace Monopoly.UnitTests
                 Setup(_ => _.Roll()).
                 Returns(_twoDiceDifferent);
 
-            var cursor = new PlayerMovement(_players, _dice.Object);
+            var cursor = new PlayerCursor(_players, _dice.Object);
             
             //Act
             PlayerMove playerMove = null;
@@ -70,7 +70,7 @@ namespace Monopoly.UnitTests
                 Setup(_ => _.Roll()).
                 Returns(_twoDiceSame);
 
-            var cursor = new PlayerMovement(_players, _dice.Object);
+            var cursor = new PlayerCursor(_players, _dice.Object);
             
             //Act
             PlayerMove playerMove = null;
@@ -79,7 +79,7 @@ namespace Monopoly.UnitTests
 
             //Assert
             playerMove.Total.Should().Be(shouldFreeze ? 0 : _twoDiceSame.Sum());
-            playerMove.Unfrozen.Should().Be(shouldFreeze);
+            playerMove.Frozen.Should().Be(shouldFreeze);
             playerMove.Player.Should().Be(_players[expectedIndexPlayer]);
         }
 
@@ -99,7 +99,7 @@ namespace Monopoly.UnitTests
                 Setup(_ => _.Roll()).
                 Returns(_twoDiceSame);
 
-            var cursor = new PlayerMovement(_players, _dice.Object);
+            var cursor = new PlayerCursor(_players, _dice.Object);
             
             //Act
             PlayerMove playerMove = null;
@@ -108,7 +108,7 @@ namespace Monopoly.UnitTests
 
             //Assert
             playerMove.Total.Should().Be(shouldFreeze ? 0 : _twoDiceSame.Sum());
-            playerMove.Unfrozen.Should().Be(shouldFreeze);
+            playerMove.Frozen.Should().Be(shouldFreeze);
             playerMove.Player.Should().Be(_players[expectedIndexPlayer]);
         }
 
@@ -116,7 +116,7 @@ namespace Monopoly.UnitTests
         public void ShouldGetAllPlayers()
         {
             //Arrange
-            var cursor = new PlayerMovement(_players, _dice.Object);
+            var cursor = new PlayerCursor(_players, _dice.Object);
             
             //Act
             var result = cursor.GetAll();

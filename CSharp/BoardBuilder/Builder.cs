@@ -39,7 +39,7 @@ namespace BoardBuilder
                 {
                     EnhancementPrice = 150, RentPrice = new RentPrice(18, 90, 250, 700, 875, 1050)
                 },
-                new PrisonVisit(),
+                new FreezeVisit(),
                 new Land("Av. Europa", 200, 100, Color.Purple)
                 {
                     EnhancementPrice = 150, RentPrice = new RentPrice(16, 80, 220, 600, 800, 1000)
@@ -89,7 +89,7 @@ namespace BoardBuilder
                 {
                     EnhancementPrice = 100, RentPrice = new RentPrice(10, 50, 150, 450, 625, 750)
                 },
-                new PrisonEntry(),
+                new FreezeEntry(),
                 new Land("Copacabana", 260, 130, Color.Green)
                 {
                     EnhancementPrice = 150, RentPrice = new RentPrice(22, 110, 330, 800, 975, 1150)

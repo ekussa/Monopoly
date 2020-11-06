@@ -4,14 +4,14 @@ using System.Linq;
 
 namespace Monopoly
 {
-    public class PlayerMovement : IPlayerCursor
+    public class PlayerCursor : IPlayerCursor
     {
         private readonly List<Player> _players;
         private readonly IDice _dice;
         
         private int _currentPlayer;
 
-        public PlayerMovement(List<Player> players, IDice dice)
+        public PlayerCursor(List<Player> players, IDice dice)
         {
             _dice = dice;
             _players = players;

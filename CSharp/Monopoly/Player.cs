@@ -14,12 +14,12 @@
         
         public PlayerMove Move(int total)
         {
-            return new PlayerMove(this, total, false);
+            return new PlayerMove(this, total);
         }
         
         public PlayerMove DontMove()
         {
-            return new PlayerMove(this, 0, false);
+            return new PlayerMove(this, 0);
         }
 
         public PlayerMove Freeze()
