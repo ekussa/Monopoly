@@ -89,7 +89,7 @@ namespace Monopoly.UnitTests
         [TestCase(4, 1, false)]
         [TestCase(5, 1, false)]
         [TestCase(6, 1, true)]
-        public void ShouldFreezelayerAndThenUnfreeze(
+        public void ShouldFreezePlayerAndThenUnfreeze(
             int iterations,
             int expectedIndexPlayer,
             bool shouldFreeze)

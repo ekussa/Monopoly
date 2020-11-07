@@ -6,6 +6,6 @@
         CannotMove,
         JustFrozen,
         ExpiredUnfreeze,
-        CanMoveSamePlayer,
+        CanMoveSamePlayer
     }
 }

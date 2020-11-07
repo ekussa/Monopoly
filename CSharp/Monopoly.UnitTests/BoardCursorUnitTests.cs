@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Drawing;
 using FluentAssertions;
 using Moq;
@@ -70,7 +69,7 @@ namespace Monopoly.UnitTests
             //Arrange
             _playerCursorMock.
                 Setup(_ => _.Next()).
-                Returns(new PlayerMove(_player1, totalDice, false));
+                Returns(_player1.Move(totalDice));
             
             var boardCursor = new BoardCursor(
                 _fivePlacesBoard,
@@ -89,7 +88,7 @@ namespace Monopoly.UnitTests
             //Arrange
             _playerCursorMock.
                 Setup(_ => _.Next()).
-                Returns(new PlayerMove(_player1, 0, true));
+                Returns(_player1.Freeze);
             
             var boardCursor = new BoardCursor(
                 _fivePlacesWithFreezeBoard,
@@ -108,7 +107,7 @@ namespace Monopoly.UnitTests
             //Arrange
             _playerCursorMock.
                 Setup(_ => _.Next()).
-                Returns(new PlayerMove(_player1, 0, true));
+                Returns(_player1.Freeze);
             
             var boardCursor = new BoardCursor(
                 _fivePlacesBoard,

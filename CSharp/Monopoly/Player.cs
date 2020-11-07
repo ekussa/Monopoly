@@ -11,20 +11,5 @@
         {
             Mobility = new Mobility(SameDiceMax, UnfreezeAttempts);
         }
-        
-        public PlayerMove Move(int total)
-        {
-            return new PlayerMove(this, total);
-        }
-        
-        public PlayerMove DontMove()
-        {
-            return new PlayerMove(this, 0);
-        }
-
-        public PlayerMove Freeze()
-        {
-            return new PlayerMove(this, 0, true);
-        }
     }
 }

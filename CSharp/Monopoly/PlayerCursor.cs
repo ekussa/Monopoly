@@ -39,10 +39,10 @@ namespace Monopoly
             return movePerm switch
             {
                 MovementResult.CanMove => player.Move(dices.Sum()),
-                MovementResult.CanMoveSamePlayer => player.Move(dices.Sum()),
-                MovementResult.CannotMove => player.DontMove(),
-                MovementResult.JustFrozen => player.Freeze(),
                 MovementResult.ExpiredUnfreeze => player.Move(dices.Sum()),
+                MovementResult.CanMoveSamePlayer => player.Move(dices.Sum()),
+                MovementResult.CannotMove => player.CannotMove(),
+                MovementResult.JustFrozen => player.Freeze(),
                 _ => throw new ArgumentOutOfRangeException()
             };
         }

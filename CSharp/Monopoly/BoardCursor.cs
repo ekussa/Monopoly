@@ -6,10 +6,10 @@ namespace Monopoly
     {
         private readonly Board _board;
         private readonly IPlayerCursor _playerCursor;
+
         private int _freezeIndex;
         
-        private Dictionary<Player, int> _positions;
-        public Dictionary<Player, int> Positions => _positions;
+        public Dictionary<Player, int> Positions { get; }
 
         public BoardCursor(Board board, IPlayerCursor playerCursor)
         {
@@ -17,7 +17,7 @@ namespace Monopoly
             _playerCursor = playerCursor;
             
             var players = _playerCursor.GetAll();
-            _positions = new Dictionary<Player, int>(players.Count);
+            Positions = new Dictionary<Player, int>(players.Count);
             foreach (var player in players)
                 SendPlayerToStart(player);
 
@@ -26,7 +26,7 @@ namespace Monopoly
 
         private void SendPlayerToStart(Player player)
         {
-            _positions[player] = 0;
+            Positions[player] = 0;
         }
 
         private void SendPlayerToPrison(Player player)
@@ -34,13 +34,13 @@ namespace Monopoly
             if (_freezeIndex != -1) return;
             
             _freezeIndex = GetPrisonVisitIndex();
-            _positions[player] = _freezeIndex;
+            Positions[player] = _freezeIndex;
         }
 
         private void MovePlayerTo(Player player, int places)
         {
-            var position = _positions[player] + places;
-            _positions[player] = position % _board.Count;
+            var position = Positions[player] + places;
+            Positions[player] = position % _board.Count;
         }
         
         public void NextTurn()
