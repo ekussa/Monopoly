@@ -4,8 +4,8 @@
     {
         public decimal Multiplier { get; }
         
-        public Company(string name, decimal buyPrice, decimal mortgage, decimal multiplier)
-            : base(name, buyPrice, mortgage)
+        public Company(string name, decimal buyPrice, decimal multiplier)
+            : base(name, buyPrice)
         {
             Multiplier = multiplier;
         }

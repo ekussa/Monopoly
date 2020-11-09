@@ -15,6 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\BoardBuilder\BoardBuilder.csproj" />
       <ProjectReference Include="..\Monopoly\Monopoly.csproj" />
     </ItemGroup>
 
