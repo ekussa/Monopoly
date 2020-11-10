@@ -13,8 +13,8 @@ namespace Monopoly.UnitTests
         
         private Land _hundredProperty;
         private Land _twoHundredProperty;
-        private Patrimony _seller;
-        private Patrimony _buyer;
+        private IPatrimony _seller;
+        private IPatrimony _buyer;
 
         [SetUp]
         public void Setup()
@@ -68,6 +68,67 @@ namespace Monopoly.UnitTests
             
             //Act
             var result = _seller.Exchange(_twoHundredProperty, _buyer);
+            
+            //Assert
+            result.Should().BeFalse();
+            _seller.Cash.Should().Be(SellerCash);
+            _seller.Count.Should().Be(1);
+            _buyer.Cash.Should().Be(BuyerCash);
+            _buyer.Count.Should().Be(0);
+        }
+ 
+        [Test]
+        public void ShouldExchangeCustomCashPerProperty()
+        {
+            //Arrange
+            _seller.Credit(_hundredProperty);
+
+            //Act
+            var result = _seller.Exchange(
+                _hundredProperty,
+                _hundredProperty.BuyPrice,
+                _buyer);
+
+            //Assert
+            result.Should().BeTrue();
+            _seller.Cash.Should().Be(BuyerCash);
+            _seller.Count.Should().Be(0);
+            _buyer.Cash.Should().Be(SellerCash);
+            _buyer.Count.Should().Be(1);
+        }
+        
+        [Test]
+        public void ShouldNotExchangeCustomCashPerProperty_WhenThereIsNoFunds()
+        {
+            //Arrange
+            _seller.Credit(_hundredProperty);
+            _buyer.Cash = BrokenBuyerCash;
+            
+            //Act
+            var result = _seller.Exchange(
+                _hundredProperty,
+                _hundredProperty.BuyPrice,
+                _buyer);
+            
+            //Assert
+            result.Should().BeFalse();
+            _seller.Cash.Should().Be(SellerCash);
+            _seller.Count.Should().Be(1);
+            _buyer.Cash.Should().Be(BrokenBuyerCash);
+            _buyer.Count.Should().Be(0);
+        }
+        
+        [Test]
+        public void ShouldNotExchangeCustomCashPerProperty_WhenPropertyDoNotBelongs()
+        {
+            //Arrange
+            _seller.Credit(_hundredProperty);
+            
+            //Act
+            var result = _seller.Exchange(
+                _twoHundredProperty,
+                _twoHundredProperty.BuyPrice,
+                _buyer);
             
             //Assert
             result.Should().BeFalse();

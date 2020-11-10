@@ -4,7 +4,8 @@
     {
         public decimal Cash { get; set; }
         bool Exchange(Property sellerProperty, IPatrimony buyer);
-
+        bool Exchange(Property sellerProperty, decimal price, IPatrimony buyer);
+        
         void Credit(decimal cash);
         bool Debit(decimal cash);
         

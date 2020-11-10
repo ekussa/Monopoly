@@ -18,11 +18,16 @@ namespace Monopoly
 
         public bool Exchange(Property sellerProperty, IPatrimony buyer)
         {
+            return Exchange(sellerProperty, sellerProperty.BuyPrice, buyer);
+        }
+
+        public bool Exchange(Property sellerProperty, decimal price, IPatrimony buyer)
+        {
             var seller = this;
 
-            if(!buyer.Debit(sellerProperty.BuyPrice))
+            if(!buyer.Debit(price))
                 return false;
-            seller.Credit(sellerProperty.BuyPrice);
+            seller.Credit(price);
 
             if (!seller.Debit(sellerProperty))
                 return false;

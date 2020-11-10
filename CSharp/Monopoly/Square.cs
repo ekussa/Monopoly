@@ -9,7 +9,6 @@ namespace Monopoly
 
         public EventHandler<Player> OnStop { get; set; }
         public EventHandler<Player> OnPass { get; set; }
-        public EventHandler<Player> OnTryToLeave { get; set; }
         
         protected Square(string name)
         {

@@ -31,16 +31,21 @@ namespace Monopoly
 
         private void SendPlayerToPrison(Player player)
         {
-            if (_freezeIndex != -1) return;
-            
-            _freezeIndex = GetPrisonVisitIndex();
+            if (_freezeIndex == -1)
+                _freezeIndex = GetPrisonVisitIndex();
             Positions[player] = _freezeIndex;
         }
 
         private void MovePlayerTo(Player player, int places)
         {
-            var position = Positions[player] + places;
+            var position = Positions[player] + 1;
+            for (var i = 0; i < places - 1; i++)
+            {
+                position = ++position % _board.Count;
+                _board[position].OnPass?.Invoke(this, player);
+            }
             Positions[player] = position % _board.Count;
+            _board[position].OnStop?.Invoke(this, player);
         }
         
         public void NextTurn()
