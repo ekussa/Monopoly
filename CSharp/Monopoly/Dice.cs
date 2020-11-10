@@ -12,20 +12,19 @@ namespace Monopoly
             _random = new Random(DateTime.Now.Millisecond);
         }
 
-        private int Throw()
+        private int SingleRoll()
         {
-            return _random.Next(0, 7);
+            return _random.Next(1, 7);
         }
         
         public int[] Roll()
         {
             _lastRoll = new[]
             {
-                Throw(),
-                Throw()
+                SingleRoll(),
+                SingleRoll()
             };
             return _lastRoll;
-
         }
 
         public int[] LastRoll()
