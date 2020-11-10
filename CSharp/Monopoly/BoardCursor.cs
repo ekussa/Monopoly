@@ -41,11 +41,11 @@ namespace Monopoly
             var position = Positions[player] + 1;
             for (var i = 0; i < places - 1; i++)
             {
-                position = ++position % _board.Count;
                 _board[position].OnPass?.Invoke(this, player);
+                position = ++position % _board.Count;
             }
-            Positions[player] = position % _board.Count;
             _board[position].OnStop?.Invoke(this, player);
+            Positions[player] = position % _board.Count;
         }
         
         public void NextTurn()
