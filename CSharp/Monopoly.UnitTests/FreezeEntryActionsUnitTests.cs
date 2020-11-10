@@ -5,21 +5,19 @@ using NUnit.Framework;
 namespace Monopoly.UnitTests
 {
     [TestFixture]
-    public class StartLandActionsUnitTests
+    public class FreezeEntryActionsUnitTests
     {
-        private const decimal StartLandPayment = 200m;
-
-        private SquareActions _squareActions;
+        private FreezeEntry _freezeEntry;
         private TestPlayer _player;
-        private Square _startLand;
+        private SquareActions _squareActions;
         private IDice _dice;
 
         [SetUp]
         public void Setup()
         {
             _dice = new Dice();
-            _startLand = new StartLand();
-            _player = new TestPlayer(0m);
+            _freezeEntry = new FreezeEntry();
+            _player = new TestPlayer(0);
             _squareActions = new BoardCursor(
                 new Board(),
                 new PlayerCursor(
@@ -31,25 +29,26 @@ namespace Monopoly.UnitTests
         }
         
         [Test]
-        public void ShouldEarn_WhenStop()
+        public void ShouldDebit_WhenStop()
         {
             //Act
             _squareActions.OnPlayerStop(
                 _player,
-                _startLand);
+                _freezeEntry);
             
             //Assert
-            _player.Patrimony.Cash.Should().Be(StartLandPayment);
         }
         
         [Test]
-        public void ShouldEarn_WhenPass()
+        public void ShouldNotDebit_WhenPass()
         {
             //Act
-            _squareActions.OnPlayerPass(_player, _startLand);
+            _squareActions.OnPlayerPass(
+                _player,
+                _freezeEntry);
             
             //Assert
-            _player.Patrimony.Cash.Should().Be(StartLandPayment);
+            _player.Patrimony.Cash.Should().Be(0);
         }
     }
 }

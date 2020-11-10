@@ -12,10 +12,10 @@ namespace Monopoly.UnitTests
         private const decimal StartMoney = 100m;
         private const decimal Rent = 1m;
         
-        private SquareActions _squareActions;
         private Land _land;
         private TestPlayer _ownerPlayer;
         private TestPlayer _visitorPlayer;
+        private SquareActions _squareActions;
 
         [SetUp]
         public void Setup()
@@ -27,14 +27,15 @@ namespace Monopoly.UnitTests
             _visitorPlayer = new TestPlayer(StartMoney);
             _ownerPlayer = new TestPlayer(StartMoney);
             _ownerPlayer.Patrimony.Credit(_land);
-            _squareActions = new SquareActions(
-                new PlayerRepository(
+            _squareActions = new BoardCursor(
+                new Board(),
+                new PlayerCursor(
                     new List<Player>
                     {
                         _visitorPlayer,
                         _ownerPlayer,
-                    }),
-                new Dice());
+                    },
+                    new Dice()));
         }
         
         [TestCase(false, false)]

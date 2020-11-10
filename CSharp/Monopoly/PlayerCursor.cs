@@ -7,13 +7,14 @@ namespace Monopoly
     public class PlayerCursor : IPlayerCursor
     {
         private readonly List<Player> _players;
-        private readonly IDice _dice;
         
         private int _currentPlayer;
 
+        public IDice Dice { get; set; }
+
         public PlayerCursor(List<Player> players, IDice dice)
         {
-            _dice = dice;
+            Dice = dice;
             _players = players;
 
             _currentPlayer = 0;
@@ -29,7 +30,7 @@ namespace Monopoly
 
         public PlayerMove Next()
         {
-            var dices = _dice.Roll();
+            var dices = Dice.Roll();
             var player = _players[_currentPlayer];
 
             var movePerm = player.Mobility.CanMove(dices);
@@ -45,6 +46,14 @@ namespace Monopoly
                 MovementResult.JustFrozen => player.Freeze(),
                 _ => throw new ArgumentOutOfRangeException()
             };
+        }
+
+        public Player GetOwnerOf(Property property)
+        {
+            return
+                _players.
+                    FirstOrDefault(player =>
+                        player.Patrimony.Owns(property));
         }
 
         public List<Player> GetAll()

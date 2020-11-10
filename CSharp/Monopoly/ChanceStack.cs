@@ -4,9 +4,9 @@ namespace Monopoly
 {
     public class ChanceStack : List<ChanceCard>
     {
-        public ChanceStack(ChanceStack stack)
+        public ChanceStack(IEnumerable<ChanceCard> stack)
         {
-            
+            AddRange(stack);
         }
     }
 }

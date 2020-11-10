@@ -1,14 +1,17 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Monopoly
 {
-    public class BoardCursor
+    public class BoardCursor : SquareActions
     {
+        private const decimal TwoHundredCash = 200m;
+        
         private readonly Board _board;
         private readonly IPlayerCursor _playerCursor;
 
         private int _freezeIndex;
-        
+
         public Dictionary<Player, int> Positions { get; }
 
         public BoardCursor(Board board, IPlayerCursor playerCursor)
@@ -19,17 +22,17 @@ namespace Monopoly
             var players = _playerCursor.GetAll();
             Positions = new Dictionary<Player, int>(players.Count);
             foreach (var player in players)
-                SendPlayerToStart(player);
+                SendToStart(player);
 
             _freezeIndex = -1;
         }
 
-        private void SendPlayerToStart(Player player)
+        private void SendToStart(Player player)
         {
             Positions[player] = 0;
         }
 
-        private void SendPlayerToPrison(Player player)
+        private void SendToPrison(Player player)
         {
             if (_freezeIndex == -1)
                 _freezeIndex = GetPrisonVisitIndex();
@@ -52,7 +55,7 @@ namespace Monopoly
         {
             var nextMove = _playerCursor.Next();
             if (nextMove.Frozen)
-                SendPlayerToPrison(nextMove.Player);
+                SendToPrison(nextMove.Player);
             else
                 MovePlayerTo(nextMove.Player, nextMove.Total);
         }
@@ -67,6 +70,77 @@ namespace Monopoly
             }
 
             return 0;
+        }
+
+        protected override void OnStartLandStop(Player player, Square square)
+        {
+            player.Patrimony.Credit(TwoHundredCash);
+        }
+
+        protected override void OnCommunityChestStop(Player player, Square square)
+        {
+            player.Patrimony.Credit(TwoHundredCash);
+        }
+
+        protected override void OnStartLandPass(Player player, Square square)
+        {
+            player.Patrimony.Credit(TwoHundredCash);
+        }
+
+        protected override void OnTheftStop(Player player, Square square)
+        {
+            player.Patrimony.Debit(TwoHundredCash);
+        }
+
+        protected override void OnFreezeEntryStop(Player player, Square square)
+        {
+            SendToPrison(player);
+        }
+
+        protected override void OnChanceSquareStop(Player player, Square square)
+        {
+            
+        }
+
+        protected override void OnLandStop(Player player, Square square)
+        {
+            var land = (Land) square;
+            var owner = _playerCursor.GetOwnerOf(land);
+            if (owner.WouldLikeToSell(land) && player.WouldLikeToBuy(land))
+            {
+                player.Buy(land, player);
+                return;
+            }
+
+            var transaction = land.GetRent;
+            player.
+                Patrimony.
+                Debit(transaction);
+            
+            owner.
+                Patrimony.
+                Credit(transaction);
+        }
+
+        protected override void OnCompanyStop(Player player, Square square)
+        {
+            var company = (Company) square;
+            var owner = _playerCursor.GetOwnerOf(company);
+            if (owner.WouldLikeToSell(company) && player.WouldLikeToBuy(company))
+            {
+                player.Buy(company, player);
+                return;
+            }
+
+            var dice = _playerCursor.Dice.LastRoll().Sum();
+            var transaction = company.GetBill(dice);
+            player.
+                Patrimony.
+                Debit(transaction);
+            
+            owner.
+                Patrimony.
+                Credit(transaction);
         }
     }
 }

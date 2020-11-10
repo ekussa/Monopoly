@@ -1,111 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Monopoly
 {
-    public class SquareActions
+    public abstract class SquareActions
     {
-        private const decimal StartLandCash = 200m;
-        
-        private readonly PlayerRepository _playerRepository;
         private readonly Dictionary<Type, Action<Player, Square>> _actionsStop;
         private readonly Dictionary<Type, Action<Player, Square>> _actionsPass;
-        private readonly IDice _dice;
 
-        public SquareActions(PlayerRepository playerRepository, IDice dice)
+        protected SquareActions()
         {
-            _dice = dice;
-            _playerRepository = playerRepository;
             _actionsStop = new Dictionary<Type, Action<Player, Square>>
             {
                 {typeof(StartLand), OnStartLandStop},
-                {typeof(Land), OnPropertyStop},
-                {typeof(Company), OnPropertyStop},
+                {typeof(Land), OnLandStop},
+                {typeof(Company), OnCompanyStop},
                 {typeof(ChanceSquare), OnChanceSquareStop},
                 {typeof(CommunityChest), OnCommunityChestStop},
-                {typeof(FreeStop), OnFreeStopStop},
+                {typeof(FreeStop), OnNop},
                 {typeof(FreezeEntry), OnFreezeEntryStop},
-                {typeof(FreezeVisit), OnFreezeVisitStop},
+                {typeof(FreezeVisit), OnNop},
                 {typeof(Theft), OnTheftStop},
             };
             _actionsPass = new Dictionary<Type, Action<Player, Square>>
             {
                 {typeof(StartLand), OnStartLandPass},
-                {typeof(Land), OnNopPass},
-                {typeof(Company), OnNopPass},
-                {typeof(ChanceSquare), OnNopPass},
-                {typeof(CommunityChest), OnNopPass},
-                {typeof(FreeStop), OnNopPass},
-                {typeof(FreezeEntry), OnNopPass},
-                {typeof(FreezeVisit), OnNopPass},
-                {typeof(Theft), OnNopPass},
+                {typeof(Land), OnNop},
+                {typeof(Company), OnNop},
+                {typeof(ChanceSquare), OnNop},
+                {typeof(CommunityChest), OnNop},
+                {typeof(FreeStop), OnNop},
+                {typeof(FreezeEntry), OnNop},
+                {typeof(FreezeVisit), OnNop},
+                {typeof(Theft), OnNop},
             };
         }
 
-        private void OnNopPass(Player player, Square square)
+        private static void OnNop(Player player, Square square)
         {
         }
 
-        private void OnStartLandPass(Player player, Square square)
-        {
-            player.Patrimony.Credit(StartLandCash);
-        }
+        protected abstract void OnStartLandStop(Player player, Square square);
+        protected abstract void OnCommunityChestStop(Player player, Square square);
+        protected abstract void OnStartLandPass(Player player, Square square);
+        protected abstract void OnTheftStop(Player player, Square square);
+        protected abstract void OnFreezeEntryStop(Player player, Square square);
+        protected abstract void OnChanceSquareStop(Player player, Square square);
+        protected abstract void OnLandStop(Player player, Square square);
+        protected abstract void OnCompanyStop(Player player, Square square);
 
-        private void OnTheftStop(Player player, Square square)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void OnFreezeVisitStop(Player player, Square square)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void OnFreezeEntryStop(Player player, Square square)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void OnFreeStopStop(Player player, Square square)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void OnCommunityChestStop(Player player, Square square)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void OnChanceSquareStop(Player player, Square square)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void OnPropertyStop(Player player, Square square)
-        {
-            var property = (Property) square;
-            var owner = _playerRepository.GetOwnerOf(property);
-            if (owner.WouldLikeToSell(property) && player.WouldLikeToBuy(property))
-            {
-                player.Buy(property, player);
-                return;
-            }
-
-            var transaction = CalculateSpending(property);
-            player.
-                Patrimony.
-                Debit(transaction);
-            
-            owner.
-                Patrimony.
-                Credit(transaction);
-        }
-
-        private void OnStartLandStop(Player player, Square square)
-        {
-            player.Patrimony.Credit(StartLandCash);
-        }
 
         public void OnPlayerStop(Player player, Square square)
         {
@@ -116,17 +59,7 @@ namespace Monopoly
         {
             Invoke(_actionsPass, player, square);
         }
-
-        private decimal CalculateSpending(Square square)
-        {
-            return square switch
-            {
-                Land land => land.GetRent,
-                Company company => company.GetBill(_dice.LastRoll().Sum()),
-                _ => 0
-            };
-        }
-
+        
         private static void Invoke(
             IReadOnlyDictionary<Type, Action<Player, Square>> actionBase,
             Player player,

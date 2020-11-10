@@ -28,14 +28,15 @@ namespace Monopoly.UnitTests
             _ownerPlayer = new TestPlayer(StartMoney);
             _ownerPlayer.Patrimony.Credit(_company);
             _dice = new Mock<IDice>(MockBehavior.Strict);
-            _squareActions = new SquareActions(
-                new PlayerRepository(
+            _squareActions = new BoardCursor(
+                new Board(),
+                new PlayerCursor(
                     new List<Player>
                     {
                         _visitorPlayer,
                         _ownerPlayer,
-                    }),
-                _dice.Object);
+                    },
+                    _dice.Object));
 
             _diceTree = new[] {1, 2};
         }

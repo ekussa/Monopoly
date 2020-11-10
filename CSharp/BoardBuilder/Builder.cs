@@ -5,7 +5,7 @@ namespace BoardBuilder
 {
     public class Builder
     {
-        public Board StandardSquareSequence()
+        public Board StandardSquareSequence(Player startOwner)
         {
             var chance = new ChanceSquare("Sorte out Revés");
 
