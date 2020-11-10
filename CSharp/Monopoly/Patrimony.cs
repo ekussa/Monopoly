@@ -62,5 +62,14 @@ namespace Monopoly
                         _.Name == property.Name);
             return item != null && _propertyList.Remove(item);
         }
+        
+        public bool Owns(Square property)
+        {
+            var ret = 
+                _propertyList.
+                    FirstOrDefault(_ =>
+                        _.Name == property.Name);
+            return ret != null;
+        }
     }
 }

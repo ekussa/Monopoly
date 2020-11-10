@@ -5,6 +5,7 @@ namespace Monopoly
     public class Dice : IDice
     {
         private readonly Random _random;
+        private int[] _lastRoll;
 
         public Dice()
         {
@@ -18,12 +19,18 @@ namespace Monopoly
         
         public int[] Roll()
         {
-            return
-                new[]
-                {
-                    Throw(),
-                    Throw()
-                };
+            _lastRoll = new[]
+            {
+                Throw(),
+                Throw()
+            };
+            return _lastRoll;
+
+        }
+
+        public int[] LastRoll()
+        {
+            return _lastRoll;
         }
     }
 }

@@ -3,5 +3,6 @@
     public interface IDice
     {
         int[] Roll();
+        int[] LastRoll();
     }
 }

@@ -9,5 +9,10 @@
         {
             Multiplier = multiplier;
         }
+
+        public decimal GetBill(int dice)
+        {
+            return Multiplier * dice;
+        }
     }
 }

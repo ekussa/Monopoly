@@ -14,5 +14,7 @@ namespace Monopoly
         {
             Color = color;
         }
+
+        public decimal GetRent => RentPrice.GetRent(LandEnhancements);
     }
 }

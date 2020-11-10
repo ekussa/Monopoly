@@ -12,5 +12,6 @@
         void Credit(Property property);
         bool Debit(Property property);
         int Count { get; }
+        bool Owns(Square property);
     }
 }
