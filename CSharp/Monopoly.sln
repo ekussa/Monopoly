@@ -4,8 +4,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monopoly", "Monopoly\Monopo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monopoly.UnitTests", "Monopoly.UnitTests\Monopoly.UnitTests.csproj", "{F2D6636A-2079-4791-874F-FB3F3EAF3C64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoardBuilder", "BoardBuilder\BoardBuilder.csproj", "{B942E333-639F-471A-841B-1E7914B21427}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,9 +18,5 @@ Global
 		{F2D6636A-2079-4791-874F-FB3F3EAF3C64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2D6636A-2079-4791-874F-FB3F3EAF3C64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2D6636A-2079-4791-874F-FB3F3EAF3C64}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B942E333-639F-471A-841B-1E7914B21427}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B942E333-639F-471A-841B-1E7914B21427}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B942E333-639F-471A-841B-1E7914B21427}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B942E333-639F-471A-841B-1E7914B21427}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
